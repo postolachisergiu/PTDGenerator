@@ -1,9 +1,7 @@
-package org.example;
+package org.generator;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hi again world!");
+        System.out.println("Hello world!");
     }
-
-
 }
