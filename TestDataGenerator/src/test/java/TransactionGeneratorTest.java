@@ -18,15 +18,16 @@ import java.util.List;
 
 
 public class TransactionGeneratorTest {
-    private static final String CSV_FILE = "C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\TestDataGenerator\\src\\main\\resources\\writeDemo.csv";
-    private static final String CSV_FILE_2 = "C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\TestDataGenerator\\src\\main\\resources\\writeDemo2.csv";
+    private static final String CSV_PATH = "C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\TestDataGenerator\\src\\main\\resources\\csv\\";
+    private static final String TRANSACTION_PATH = CSV_PATH + "transactions.csv";
+
 
     @Test
     public void generateTransaction() throws FileNotFoundException {
 
-        List<Transaction> transactions = generateTransactions(2000);
+        List<Transaction> transactions = generateTransactions(3);
 
-        generateCsv(transactions, CSV_FILE_2);
+        generateCsv(transactions, TRANSACTION_PATH);
 
     }
 
@@ -61,9 +62,6 @@ public class TransactionGeneratorTest {
         }
         return transactions;
     }
-
-
-
 
 
     @Test
