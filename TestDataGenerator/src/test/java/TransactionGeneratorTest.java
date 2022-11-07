@@ -3,6 +3,7 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import org.generator.EnvironmentProperty;
 import org.generator.enums.CurrencyEnum;
 import org.generator.models.Transaction;
 import org.generator.random.RandomStringGenerator;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 
 public class TransactionGeneratorTest {
@@ -29,6 +31,13 @@ public class TransactionGeneratorTest {
 
         generateCsv(transactions, TRANSACTION_PATH);
 
+    }
+
+    @Test
+    public void readProperties() throws IOException {
+        Properties prop = EnvironmentProperty.readPropertiesFile("C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\src\\main\\resources\\TestEnvironment.properties");
+        System.out.println("username: "+ prop.getProperty("app.username"));
+        System.out.println("password: "+ prop.getProperty("app.password"));
     }
 
 
