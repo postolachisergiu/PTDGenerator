@@ -9,7 +9,6 @@ import org.generator.models.Transaction;
 import org.generator.random.RandomStringGenerator;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -22,29 +21,22 @@ import java.util.Properties;
 public class TransactionGeneratorTest {
     private static final String CSV_PATH = "C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\TestDataGenerator\\src\\main\\resources\\csv\\";
     private static final String TRANSACTION_PATH = CSV_PATH + "transactions.csv";
+    private static final String TEST_ENVIRONMENT_PATH = "C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\src\\main\\resources\\TestEnvironment.properties";
 
 
     @Test
-    public void generateTransaction() throws FileNotFoundException {
-
-        List<Transaction> transactions = generateTransactions(3);
-
-        generateCsv(transactions, TRANSACTION_PATH);
-
-    }
-
-    @Test
-    public void readProperties() throws IOException {
-        Properties prop = EnvironmentProperty.readPropertiesFile("C:\\Users\\spostolachi\\IdeaProjects\\PerformanceTestDataGenerator\\src\\main\\resources\\TestEnvironment.properties");
-        System.out.println("username: "+ prop.getProperty("app.username"));
-        System.out.println("password: "+ prop.getProperty("app.password"));
+    public void generateTransaction() throws IOException {
+        Properties prop = EnvironmentProperty.readPropertiesFile(TEST_ENVIRONMENT_PATH);
+        List<Transaction> transactions = generateTransactions(
+                Integer.parseInt(prop.getProperty("transaction.number.load")));
+        generateTestDataForEntity(transactions, TRANSACTION_PATH);
     }
 
 
-    private static void generateCsv(List<Transaction> transactions, String file) {
+    private void generateTransactionDataIntoCsv(List<Transaction> transactions) {
 
         try (
-                Writer writer = Files.newBufferedWriter(Paths.get(file));
+                Writer writer = Files.newBufferedWriter(Paths.get(TransactionGeneratorTest.TRANSACTION_PATH))
         ) {
             StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
@@ -54,6 +46,21 @@ public class TransactionGeneratorTest {
         } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private <T> void generateTestDataForEntity(List<T> objects, String path) {
+        try (
+                Writer writer = Files.newBufferedWriter(Paths.get(path))
+        ) {
+            StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
+
+            beanToCsv.write(objects);
+        } catch (CsvRequiredFieldEmptyException | CsvDataTypeMismatchException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
